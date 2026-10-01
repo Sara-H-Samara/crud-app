@@ -1,0 +1,23 @@
+# Maven
+backend/target/
+target/
+*.class
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+frontend/.vscode/
+
+# macOS
+.DS_Store
+
+# Angular
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+
+# Environment files
+.env
