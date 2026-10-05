@@ -66,3 +66,15 @@
 .add-button:hover {
   background: #a95f41;
 }
+
+.cancel-button {
+  margin-top: 29px;
+  padding: 13px 22px;
+  border: 1px solid #ddd6cd;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #292824;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}

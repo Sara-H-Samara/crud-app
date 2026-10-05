@@ -1,1 +1,25 @@
-<p>user-list works!</p>
+@if (users().length === 0) {
+  <div class="empty-state">
+    <div class="empty-icon">+</div>
+    <h3>No users yet</h3>
+    <p>Add your first user using the form above.</p>
+  </div>
+} @else {
+  <ul class="user-list">
+    @for (user of users(); track user.id) {
+      <li class="user-item">
+        <div class="avatar">{{ user.name.charAt(0).toUpperCase() }}</div>
+
+        <div class="user-info">
+          <span class="user-name">{{ user.name }}</span>
+          <span class="user-email">{{ user.email }}</span>
+        </div>
+
+        <div class="actions">
+          <button class="edit-button" (click)="editUser.emit(user)">Edit</button>
+          <button class="delete-button" (click)="deleteUser.emit(user.id!)">Delete</button>
+        </div>
+      </li>
+    }
+  </ul>
+}

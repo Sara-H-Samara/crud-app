@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+
+import { UsersPage } from './features/users/components/users-page/users-page';
 
 @Component({
-  imports: [RouterOutlet],
+  imports: [UsersPage],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
