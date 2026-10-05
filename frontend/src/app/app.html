@@ -1,3 +1,52 @@
-<h1>User Management</h1>
+<div class="users-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">USER MANAGEMENT</p>
+      <h1>Manage your users</h1>
+      <p class="subtitle">
+        Add, view, update, and manage users from one place.
+      </p>
+    </div>
 
-<app-user />
+    <div class="user-count">
+      <span class="count">0</span>
+      <span>Users</span>
+    </div>
+  </header>
+
+  <section class="content-card">
+    <div class="section-header">
+      <div>
+        <h2>Add a new user</h2>
+        <p>Enter the user's information below.</p>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" type="text" placeholder="Enter name" />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" placeholder="Enter email" />
+      </div>
+
+      <button class="add-button">Add User</button>
+    </div>
+  </section>
+
+  <section class="users-section">
+    <div class="section-title">
+      <h2>Users</h2>
+      <span>All registered users</span>
+    </div>
+
+    <div class="empty-state">
+      <div class="empty-icon">+</div>
+      <h3>No users yet</h3>
+      <p>Add your first user using the form above.</p>
+    </div>
+  </section>
+</div>
