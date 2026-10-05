@@ -1,0 +1,25 @@
+<div class="users-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">USER MANAGEMENT</p>
+      <h1>Manage your users</h1>
+      <p class="subtitle">Add, view, update, and manage users from one place.</p>
+    </div>
+
+    <div class="user-count">
+      <span class="count">{{ users().length }}</span>
+      <span>Users</span>
+    </div>
+  </header>
+
+  <app-user-form [user]="selectedUser()" (userSaved)="onSaved()" (cancelled)="onCancel()" />
+
+  <section class="users-section">
+    <div class="section-title">
+      <h2>Users</h2>
+      <span>All registered users</span>
+    </div>
+
+    <app-user-list [users]="users()" (editUser)="onEdit($event)" (deleteUser)="onDelete($event)" />
+  </section>
+</div>
