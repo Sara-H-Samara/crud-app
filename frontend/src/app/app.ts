@@ -1,11 +1,17 @@
 import { Component } from '@angular/core';
-
 import { UsersPage } from './features/users/components/users-page/users-page';
+import { ShopPage } from './features/shop/components/shop-page/shop-page';
 
 @Component({
-  imports: [UsersPage],
   selector: 'app-root',
-  styleUrl: './app.css',
+  imports: [UsersPage, ShopPage],
   templateUrl: './app.html',
+  styleUrl: './app.css',
 })
-export class App {}
+export class App {
+  page: 'users' | 'shop' = 'users';
+
+  setPage(page: 'users' | 'shop') {
+    this.page = page;
+  }
+}
