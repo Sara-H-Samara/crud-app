@@ -1,1 +1,10 @@
-<app-users-page />
+<nav class="main-nav">
+  <button [class.active]="page === 'users'" (click)="setPage('users')">Users CRUD</button>
+  <button [class.active]="page === 'shop'" (click)="setPage('shop')">Mini Shop</button>
+</nav>
+
+@if (page === 'users') {
+  <app-users-page />
+} @else {
+  <app-shop-page />
+}
