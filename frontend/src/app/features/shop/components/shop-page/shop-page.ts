@@ -1,101 +1,67 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnDestroy, OnInit, computed, signal } from '@angular/core';
 import { Product } from '../../models/product';
+import { ProductItem } from '../product-item/product-item';
+import { LoginBox } from '../login-box/login-box';
 
 @Component({
-  imports: [FormsModule], // for ngModel
+  imports: [ProductItem, LoginBox],
   selector: 'app-shop-page',
   styleUrl: './shop-page.css',
   templateUrl: './shop-page.html',
 })
 export class ShopPage implements OnInit, OnDestroy {
-  // Products
-  products: Product[] = [];
-  loading = true; // if / else
-  expandedId: number | null = null; // toggle (which product is open)
+  products = signal<Product[]>([]);
+  loading = signal(true);
+  showCart = signal(false);
+  username = signal<string | null>(null);
+  reviews = signal<string[]>([]);
 
-  // Cart
-  showCart = false; // hide / show
-
-  // Login
-  username = '';
-  password = '';
-  showPassword = false; // toggle
-  isLoggedIn = false; // if / else
   private timerId: any;
 
-  // Reviews
-  reviews: string[] = [];
+  // values calculated from other signals
+  isLoggedIn = computed(() => this.username() !== null);
+  cartItems = computed(() => this.products().filter((product) => product.qty > 0));
+  total = computed(() =>
+    this.cartItems().reduce((sum, product) => sum + product.price * product.qty, 0),
+  );
 
-  // Lifecycle hook: runs once when the component starts
   ngOnInit() {
-    // setTimeout pretends to be a slow backend call
-    console.log('shop created');
     this.timerId = setTimeout(() => {
-      this.products = [
+      this.products.set([
         { id: 1, name: 'Notebook', price: 5, description: 'A5 size, 100 pages', qty: 0 },
         { id: 2, name: 'Pen', price: 2, description: 'Blue ink, 0.7 mm', qty: 0 },
         { id: 3, name: 'Backpack', price: 30, description: 'Waterproof, 20 liters', qty: 0 },
-      ];
-      this.loading = false;
+      ]);
+      this.loading.set(false);
     }, 1000);
   }
 
-  // Quantity (your counter logic)
-  increase(product: Product) {
-    product.qty++;
+  ngOnDestroy() {
+    clearTimeout(this.timerId);
   }
 
-  decrease(product: Product) {
-    if (product.qty > 0) {
-      product.qty--;
-    }
+  // the parent DECIDES when a child sends a message
+  updateQty(change: { id: number; qty: number }) {
+    this.products.update((list) =>
+      list.map((product) => (product.id === change.id ? { ...product, qty: change.qty } : product)),
+    );
   }
 
-  // Values calculated from the state (not saved separately)
-  get cartItems(): Product[] {
-    return this.products.filter((p) => p.qty > 0);
+  onLogin(name: string) {
+    this.username.set(name);
   }
 
-  get total(): number {
-    return this.cartItems.reduce((sum, p) => sum + p.price * p.qty, 0);
-  }
-
-  // Toggles
-  toggleDetails(id: number) {
-    this.expandedId = this.expandedId === id ? null : id;
+  onLogout() {
+    this.username.set(null);
   }
 
   toggleCart() {
-    this.showCart = !this.showCart;
+    this.showCart.update((value) => !value);
   }
 
-  togglePassword() {
-    this.showPassword = !this.showPassword;
-  }
-
-  // Login
-  login() {
-    if (this.username.trim() && this.password) {
-      this.isLoggedIn = true;
-    }
-  }
-
-  logout() {
-    this.isLoggedIn = false;
-    this.password = '';
-    this.username = '';
-  }
-
-  // Reviews (the value comes from a template reference)
   addReview(text: string) {
     if (text.trim()) {
-      this.reviews.push(text);
+      this.reviews.update((list) => [...list, text]);
     }
-  }
-
-  ngOnDestroy() {
-    console.log('shop destroyed');
-    clearTimeout(this.timerId); // cancel the timer if the user leaves early
   }
 }

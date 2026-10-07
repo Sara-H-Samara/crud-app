@@ -1,93 +1,64 @@
 <div class="page">
-  <!-- Header: login state (if / else) -->
-  <header class="card header">
-    @if (isLoggedIn) {
-      <span>Welcome, {{ username }}</span>
-      <button class="secondary" (click)="logout()">log out</button>
-    } @else {
-      <input type="text" placeholder="username" [(ngModel)]="username" />
-      <input
-        [type]="showPassword ? 'text' : 'password'"
-        placeholder="password"
-        [(ngModel)]="password"
-      />
-      <button class="secondary" (click)="togglePassword()">
-        {{ showPassword ? 'Hide' : 'Show' }}
-      </button>
-      <button (click)="login()">log in</button>
-    }
-  </header>
+  <app-login-box
+    class="card"
+    [loggedInUser]="username()"
+    (loggedIn)="onLogin($event)"
+    (loggedOut)="onLogout()"
+  />
 
-  <!-- Products: loading / list -->
   <section class="card">
     <h3>Products</h3>
 
-    @if (loading) {
+    @if (loading()) {
       <p>Loading products...</p>
     } @else {
       <ul class="products">
-        @for (product of products; track product.id) {
-          <li [class.selected]="expandedId === product.id">
-            <div class="row">
-              <strong>{{ product.name }}</strong>
-              <span>{{ product.price }} $</span>
-            </div>
-
-            <div class="row">
-              <div class="qty">
-                <button [disabled]="product.qty === 0" (click)="decrease(product)">-</button>
-                <span>{{ product.qty }}</span>
-                <button (click)="increase(product)">+</button>
-              </div>
-              <button class="secondary" (click)="toggleDetails(product.id)">
-                {{ expandedId === product.id ? 'Hide' : 'Show' }} details
-              </button>
-            </div>
-
-            @if (expandedId === product.id) {
-              <p class="details">{{ product.description }}</p>
-            }
+        @for (product of products(); track product.id) {
+          <li>
+            <app-product-item [product]="product" (qtyChange)="updateQty($event)" />
           </li>
         }
       </ul>
     }
   </section>
 
-  <!-- Cart: hide / show -->
   <section class="card">
     <button (click)="toggleCart()">
-      {{ showCart ? 'Hide' : 'Show' }} cart ({{ cartItems.length }})
+      {{ showCart() ? 'Hide' : 'Show' }} cart ({{ cartItems().length }})
     </button>
 
-    @if (showCart) {
+    @if (showCart()) {
       <ul class="cart">
-        @for (item of cartItems; track item.id) {
+        @for (item of cartItems(); track item.id) {
           <li>{{ item.name }} x {{ item.qty }} = {{ item.price * item.qty }} $</li>
         }
       </ul>
       <p>
-        <strong>Total: {{ total }} $</strong>
+        <strong>Total: {{ total() }} $</strong>
       </p>
 
-      <!-- else if: three possible messages -->
-      @if (cartItems.length === 0) {
+      @if (cartItems().length === 0) {
         <p class="msg">Your cart is empty.</p>
-      } @else if (!isLoggedIn) {
+      } @else if (!isLoggedIn()) {
         <p class="msg warn">Please log in to checkout.</p>
       } @else {
-        <p class="msg ok">Ready to checkout, {{ username }}!</p>
+        <p class="msg ok">Ready to checkout, {{ username() }}!</p>
       }
     }
   </section>
 
-  <!-- Reviews: template reference -->
   <section class="card">
     <h3>Reviews</h3>
-    <input #reviewInput type="text" placeholder="write a review" />
+    <input
+      #reviewInput
+      type="text"
+      placeholder="write a review"
+      (keyup.enter)="addReview(reviewInput.value); reviewInput.value = ''"
+    />
     <button (click)="addReview(reviewInput.value); reviewInput.value = ''">send review</button>
 
     <ul class="reviews">
-      @for (review of reviews; track $index) {
+      @for (review of reviews(); track $index) {
         <li>{{ review }}</li>
       }
     </ul>
