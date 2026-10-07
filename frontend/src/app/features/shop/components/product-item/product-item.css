@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: var(--bg);
+  border-radius: var(--radius-input);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.details {
+  margin: 0;
+}
+
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}

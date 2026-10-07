@@ -1,0 +1,18 @@
+<div class="bar">
+  @if (loggedInUser()) {
+    <span>Welcome, {{ loggedInUser() }}</span>
+    <button class="secondary" (click)="loggedOut.emit()">log out</button>
+  } @else {
+    <input type="text" placeholder="username" [(ngModel)]="usernameField" />
+    <input
+      [type]="showPassword() ? 'text' : 'password'"
+      placeholder="password"
+      [(ngModel)]="passwordField"
+      (keyup.enter)="submit()"
+    />
+    <button class="secondary" (click)="togglePassword()">
+      {{ showPassword() ? 'Hide' : 'Show' }}
+    </button>
+    <button (click)="submit()">log in</button>
+  }
+</div>
