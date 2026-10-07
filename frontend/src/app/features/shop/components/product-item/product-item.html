@@ -1,0 +1,20 @@
+<div class="row">
+  <strong>{{ product().name }}</strong>
+  <span>{{ product().price }} $</span>
+</div>
+
+<div class="row">
+  <div class="qty">
+    <button [disabled]="product().qty === 0" (click)="decrease()">-</button>
+    <span>{{ product().qty }}</span>
+    <button (click)="increase()">+</button>
+  </div>
+
+  <button class="secondary" (click)="toggleDetails()">
+    {{ showDetails() ? 'Hide' : 'Show' }} details
+  </button>
+</div>
+
+@if (showDetails()) {
+  <p class="details">{{ product().description }}</p>
+}
