@@ -30,19 +30,24 @@
     @if (showCart()) {
       <ul class="cart">
         @for (item of cartItems(); track item.id) {
-          <li>{{ item.name }} x {{ item.qty }} = {{ item.price * item.qty }} $</li>
+          <li [appHighlight]="'#d9f2e3'">
+            {{ item.name }} x {{ item.qty }} = {{ item.price * item.qty | currency }}
+          </li>
+        } @empty {
+          <li>Your cart is empty.</li>
         }
       </ul>
-      <p>
-        <strong>Total: {{ total() }} $</strong>
-      </p>
 
-      @if (cartItems().length === 0) {
-        <p class="msg">Your cart is empty.</p>
-      } @else if (!isLoggedIn()) {
-        <p class="msg warn">Please log in to checkout.</p>
-      } @else {
-        <p class="msg ok">Ready to checkout, {{ username() }}!</p>
+      @if (cartItems().length > 0) {
+        <p>
+          <strong>Total: {{ total() | currency }}</strong>
+        </p>
+
+        @if (!isLoggedIn()) {
+          <p class="msg warn">Please log in to checkout.</p>
+        } @else {
+          <p class="msg ok">Ready to checkout, {{ username() }}!</p>
+        }
       }
     }
   </section>
@@ -59,7 +64,10 @@
 
     <ul class="reviews">
       @for (review of reviews(); track $index) {
-        <li>{{ review }}</li>
+        <li>
+          {{ review.text }}
+          <small>{{ review.time | date: 'shortTime' }}</small>
+        </li>
       }
     </ul>
   </section>

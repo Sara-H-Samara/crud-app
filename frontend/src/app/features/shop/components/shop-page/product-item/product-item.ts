@@ -1,8 +1,10 @@
 import { Component, Input, input, output, signal } from '@angular/core';
-import { Product } from '../../models/product';
+import { Product } from '../../../models/product';
+import { Truncate } from '../../../../../shared/pipes/truncate-pipe';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
-  imports: [],
+  imports: [Truncate, CurrencyPipe],
   selector: 'app-product-item',
   styleUrl: './product-item.css',
   templateUrl: './product-item.html',
