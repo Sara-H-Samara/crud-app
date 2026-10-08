@@ -34,7 +34,9 @@ src/
 │   │   │   └── services/
 │   │   └── shop/
 │   │       ├── components/
-│   │       │   └── shop-page/
+│   │       │       ├── shop-page/
+│   │       │       ├── product-item/
+│   │       │       └── login-box/
 │   │       └── models/
 │   ├── app.ts
 │   ├── app.html
