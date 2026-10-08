@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit, computed, signal } from '@angular/core';
 import { Product } from '../../models/product';
-import { ProductItem } from '../product-item/product-item';
-import { LoginBox } from '../login-box/login-box';
+import { ProductItem } from './product-item/product-item';
+import { LoginBox } from './login-box/login-box';
+import { CurrencyPipe, DatePipe } from '@angular/common';
+import { Highlight } from '../../../../shared/directives/highlight';
 
 @Component({
-  imports: [ProductItem, LoginBox],
+  imports: [ProductItem, LoginBox, CurrencyPipe, DatePipe, Highlight],
   selector: 'app-shop-page',
   styleUrl: './shop-page.css',
   templateUrl: './shop-page.html',
@@ -14,7 +16,7 @@ export class ShopPage implements OnInit, OnDestroy {
   loading = signal(true);
   showCart = signal(false);
   username = signal<string | null>(null);
-  reviews = signal<string[]>([]);
+  reviews = signal<{ text: string; time: Date }[]>([]);
 
   private timerId: any;
 
@@ -61,7 +63,7 @@ export class ShopPage implements OnInit, OnDestroy {
 
   addReview(text: string) {
     if (text.trim()) {
-      this.reviews.update((list) => [...list, text]);
+      this.reviews.update((list) => [...list, { text: text.trim(), time: new Date() }]);
     }
   }
 }

@@ -1,6 +1,6 @@
 <div class="row">
   <strong>{{ product().name }}</strong>
-  <span>{{ product().price }} $</span>
+  <span>{{ product().price | currency }} </span>
 </div>
 
 <div class="row">
@@ -16,5 +16,5 @@
 </div>
 
 @if (showDetails()) {
-  <p class="details">{{ product().description }}</p>
+  <p class="details">{{ product().description | truncate }}</p>
 }
