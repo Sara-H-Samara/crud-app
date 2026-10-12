@@ -1,7 +1,16 @@
-.bar {
+.login-form {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.login-form input.ng-invalid.ng-touched {
+  border-color: var(--danger, #c0392b);
 }

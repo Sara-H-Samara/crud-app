@@ -2,14 +2,12 @@ import { Injectable, signal } from '@angular/core';
 
 import { Product } from '../models/product';
 
-/**
- * Knows WHERE products come from. Components only ask for them.
- * Today the list is in memory; on Day 18 it will come from the backend.
- */
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
+  private nextId = 4;
+
   private readonly _products = signal<Product[]>([
     { id: 1, name: 'Notebook', price: 5, description: 'A5 size, 100 pages' },
     { id: 2, name: 'Pen', price: 2, description: 'Blue ink, 0.7 mm' },
@@ -17,4 +15,9 @@ export class ProductService {
   ]);
 
   readonly products = this._products.asReadonly();
+
+  // Omit<Product, 'id'> = a Product WITHOUT the id; the service creates the id itself
+  add(product: Omit<Product, 'id'>): void {
+    this._products.update((list) => [...list, { id: this.nextId++, ...product }]);
+  }
 }
