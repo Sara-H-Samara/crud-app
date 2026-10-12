@@ -1,0 +1,61 @@
+<h3>Add a product</h3>
+
+<!-- [formGroup] connects this <form> to the FormGroup in TypeScript -->
+<form class="product-form" [formGroup]="productForm" (ngSubmit)="onSubmit()" novalidate>
+  <!-- NAME -->
+  <label for="product-name">Name</label>
+  <input id="product-name" formControlName="name" />
+  @if (f.name.invalid && f.name.touched) {
+    @if (f.name.hasError('required')) {
+      <small class="msg warn">Name is required.</small>
+    } @else if (f.name.hasError('minlength')) {
+      <small class="msg warn">
+        At least {{ f.name.errors?.['minlength'].requiredLength }} characters.
+      </small>
+    }
+  }
+
+  <!-- PRICE: type="number" → the value is a number, not text -->
+  <label for="product-price">Price</label>
+  <input id="product-price" type="number" step="0.5" formControlName="price" />
+  @if (f.price.invalid && f.price.touched) {
+    @if (f.price.hasError('required')) {
+      <small class="msg warn">Price is required.</small>
+    } @else if (f.price.hasError('min')) {
+      <small class="msg warn">Minimum price is {{ f.price.errors?.['min'].min | currency }}.</small>
+    } @else if (f.price.hasError('max')) {
+      <small class="msg warn">Maximum price is {{ f.price.errors?.['max'].max | currency }}.</small>
+    }
+  }
+
+  <!-- DESCRIPTION -->
+  <label for="product-description">Description</label>
+  <textarea id="product-description" rows="2" formControlName="description"></textarea>
+  <small>{{ f.description.value.length }} / 100</small>
+  @if (f.description.invalid && f.description.touched) {
+    @if (f.description.hasError('required')) {
+      <small class="msg warn">Description is required.</small>
+    } @else if (f.description.hasError('maxlength')) {
+      <small class="msg warn">Maximum 100 characters.</small>
+    }
+  }
+
+  <div class="actions">
+    <button type="submit">Add product</button>
+    <!-- type="button" so it does NOT submit the form -->
+    <button type="button" class="secondary" (click)="fillExample()">Fill example</button>
+    <button type="button" class="secondary" (click)="productForm.reset()">Clear</button>
+  </div>
+</form>
+
+@if (lastAdded(); as name) {
+  <p class="msg ok">"{{ name }}" was added to the products list.</p>
+}
+
+<!-- LIVE PREVIEW: updates on every keystroke thanks to valueChanges -->
+<div class="preview">
+  <small>Preview</small>
+  <strong>{{ preview().name || 'Product name' }}</strong>
+  <span>{{ preview().price | currency }}</span>
+  <p>{{ preview().description || 'Description…' }}</p>
+</div>

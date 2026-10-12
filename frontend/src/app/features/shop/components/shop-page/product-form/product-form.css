@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+.product-form {
+  display: grid;
+  gap: 6px;
+  max-width: 420px;
+}
+
+.product-form .ng-invalid.ng-touched {
+  border-color: var(--danger, #c0392b);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.preview {
+  display: grid;
+  gap: 2px;
+  max-width: 420px;
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px dashed var(--accent);
+  border-radius: var(--radius, 6px);
+}

@@ -1,18 +1,18 @@
-import { Component, OnDestroy, OnInit, inject, signal } from "@angular/core";
-import { CurrencyPipe, DatePipe } from "@angular/common";
-
-import { ProductService } from "../../services/product";
-import { CartService } from "../../services/cart";
-import { AuthService } from "../../../../core/services/auth";
-import { ProductItem } from "./product-item/product-item";
-import { LoginBox } from "./login-box/login-box";
-import { Highlight } from "../../../../shared/directives/highlight";
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
+import { CurrencyPipe, DatePipe } from '@angular/common';
+import { ProductForm } from './product-form/product-form';
+import { ProductService } from '../../services/product';
+import { CartService } from '../../services/cart';
+import { AuthService } from '../../../../core/services/auth';
+import { ProductItem } from './product-item/product-item';
+import { LoginBox } from './login-box/login-box';
+import { Highlight } from '../../../../shared/directives/highlight';
 
 @Component({
-  imports: [ProductItem, LoginBox, CurrencyPipe, DatePipe, Highlight],
-  selector: "app-shop-page",
-  styleUrl: "./shop-page.css",
-  templateUrl: "./shop-page.html",
+  imports: [ProductItem, LoginBox, CurrencyPipe, DatePipe, Highlight, ProductForm],
+  selector: 'app-shop-page',
+  styleUrl: './shop-page.css',
+  templateUrl: './shop-page.html',
 })
 export class ShopPage implements OnInit, OnDestroy {
   // Dependency Injection: Angular hands us the shared instances
@@ -42,10 +42,7 @@ export class ShopPage implements OnInit, OnDestroy {
 
   addReview(text: string) {
     if (text.trim()) {
-      this.reviews.update((list) => [
-        ...list,
-        { text: text.trim(), time: new Date() },
-      ]);
+      this.reviews.update((list) => [...list, { text: text.trim(), time: new Date() }]);
     }
   }
 }
