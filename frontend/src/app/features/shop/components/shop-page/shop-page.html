@@ -1,55 +1,52 @@
 <div class="page">
-  <app-login-box
-    class="card"
-    [loggedInUser]="username()"
-    (loggedIn)="onLogin($event)"
-    (loggedOut)="onLogout()"
-  />
+  <!-- no inputs/outputs any more: LoginBox uses AuthService -->
+  <app-login-box class="card" />
 
   <section class="card">
     <h3>Products</h3>
 
     @if (loading()) {
-      <p>Loading products...</p>
+    <p>Loading products...</p>
     } @else {
-      <ul class="products">
-        @for (product of products(); track product.id) {
-          <li>
-            <app-product-item [product]="product" (qtyChange)="updateQty($event)" />
-          </li>
-        }
-      </ul>
+    <ul class="products">
+      @for (product of productService.products(); track product.id) {
+      <li>
+        <!-- no (qtyChange) any more: ProductItem uses CartService -->
+        <app-product-item [product]="product" />
+      </li>
+      }
+    </ul>
     }
   </section>
 
   <section class="card">
     <button (click)="toggleCart()">
-      {{ showCart() ? 'Hide' : 'Show' }} cart ({{ cartItems().length }})
+      {{ showCart() ? 'Hide' : 'Show' }} cart ({{ cart.count() }})
     </button>
 
     @if (showCart()) {
-      <ul class="cart">
-        @for (item of cartItems(); track item.id) {
-          <li [appHighlight]="'#d9f2e3'">
-            {{ item.name }} x {{ item.qty }} = {{ item.price * item.qty | currency }}
-          </li>
-        } @empty {
-          <li>Your cart is empty.</li>
-        }
-      </ul>
-
-      @if (cartItems().length > 0) {
-        <p>
-          <strong>Total: {{ total() | currency }}</strong>
-        </p>
-
-        @if (!isLoggedIn()) {
-          <p class="msg warn">Please log in to checkout.</p>
-        } @else {
-          <p class="msg ok">Ready to checkout, {{ username() }}!</p>
-        }
+    <ul class="cart">
+      @for (item of cart.items(); track item.product.id) {
+      <li [appHighlight]="'#d9f2e3'">
+        {{ item.product.name }} x {{ item.qty }} = {{ item.product.price *
+        item.qty | currency }}
+      </li>
+      } @empty {
+      <li>Your cart is empty.</li>
       }
-    }
+    </ul>
+
+    @if (cart.count() > 0) {
+    <p>
+      <strong>Total: {{ cart.total() | currency }}</strong>
+    </p>
+
+    @if (!auth.isLoggedIn()) {
+    <p class="msg warn">Please log in to checkout.</p>
+    } @else {
+    <p class="msg ok">Ready to checkout, {{ auth.username() }}!</p>
+    <button class="secondary" (click)="cart.clear()">Clear cart</button>
+    } } }
   </section>
 
   <section class="card">
@@ -60,14 +57,16 @@
       placeholder="write a review"
       (keyup.enter)="addReview(reviewInput.value); reviewInput.value = ''"
     />
-    <button (click)="addReview(reviewInput.value); reviewInput.value = ''">send review</button>
+    <button (click)="addReview(reviewInput.value); reviewInput.value = ''">
+      send review
+    </button>
 
     <ul class="reviews">
       @for (review of reviews(); track $index) {
-        <li>
-          {{ review.text }}
-          <small>{{ review.time | date: 'shortTime' }}</small>
-        </li>
+      <li>
+        {{ review.text }}
+        <small>{{ review.time | date: 'shortTime' }}</small>
+      </li>
       }
     </ul>
   </section>

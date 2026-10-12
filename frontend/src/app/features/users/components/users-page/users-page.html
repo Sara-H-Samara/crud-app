@@ -3,16 +3,19 @@
     <div>
       <p class="eyebrow">USER MANAGEMENT</p>
       <h1>Manage your users</h1>
-      <p class="subtitle">Add, view, update, and manage users from one place.</p>
+      <p class="subtitle">
+        Add, view, update, and manage users from one place.
+      </p>
     </div>
 
     <div class="user-count">
-      <span class="count">{{ users().length }}</span>
+      <span class="count">{{ userService.count() }}</span>
       <span>Users</span>
     </div>
   </header>
 
-  <app-user-form [user]="selectedUser()" (userSaved)="onSaved()" (cancelled)="onCancel()" />
+  <!-- UserForm injects UserService itself: no inputs/outputs needed -->
+  <app-user-form />
 
   <section class="users-section">
     <div class="section-title">
@@ -20,6 +23,11 @@
       <span>All registered users</span>
     </div>
 
-    <app-user-list [users]="users()" (editUser)="onEdit($event)" (deleteUser)="onDelete($event)" />
+    <!-- UserList stays a simple "presentational" component with input/output -->
+    <app-user-list
+      [users]="userService.users()"
+      (editUser)="userService.select($event)"
+      (deleteUser)="userService.remove($event)"
+    />
   </section>
 </div>

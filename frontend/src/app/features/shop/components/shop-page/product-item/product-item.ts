@@ -1,35 +1,34 @@
-import { Component, Input, input, output, signal } from '@angular/core';
-import { Product } from '../../../models/product';
-import { Truncate } from '../../../../../shared/pipes/truncate-pipe';
-import { CurrencyPipe } from '@angular/common';
+import { Component, computed, inject, input, signal } from "@angular/core";
+import { CurrencyPipe } from "@angular/common";
+
+import { Product } from "../../../models/product";
+import { CartService } from "../../../services/cart";
+import { Truncate } from "../../../../../shared/pipes/truncate-pipe";
 
 @Component({
   imports: [Truncate, CurrencyPipe],
-  selector: 'app-product-item',
-  styleUrl: './product-item.css',
-  templateUrl: './product-item.html',
+  selector: "app-product-item",
+  styleUrl: "./product-item.css",
+  templateUrl: "./product-item.html",
 })
 export class ProductItem {
+  // data still comes DOWN from the parent with an input...
   product = input.required<Product>();
 
-  // @Input({ required: true })  //Old style
-  // product!: Product;
+  // ...but the cart is shared state, so the child uses the service directly
+  // instead of emitting an output (the old `qtyChange`).
+  private readonly cart = inject(CartService);
 
-  qtyChange = output<{ id: number; qty: number }>();
-
-  //@Output()
-  // qtyChange = new EventEmitter<{ id: number; qty: number }>();
+  qty = computed(() => this.cart.qtyOf(this.product().id));
 
   showDetails = signal(false);
 
   increase() {
-    this.qtyChange.emit({ id: this.product().id, qty: this.product().qty + 1 });
+    this.cart.add(this.product());
   }
 
   decrease() {
-    if (this.product().qty > 0) {
-      this.qtyChange.emit({ id: this.product().id, qty: this.product().qty - 1 });
-    }
+    this.cart.remove(this.product());
   }
 
   toggleDetails() {

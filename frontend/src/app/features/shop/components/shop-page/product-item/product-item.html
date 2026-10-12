@@ -5,8 +5,8 @@
 
 <div class="row">
   <div class="qty">
-    <button [disabled]="product().qty === 0" (click)="decrease()">-</button>
-    <span>{{ product().qty }}</span>
+    <button [disabled]="qty() === 0" (click)="decrease()">-</button>
+    <span>{{ qty() }}</span>
     <button (click)="increase()">+</button>
   </div>
 
@@ -16,5 +16,5 @@
 </div>
 
 @if (showDetails()) {
-  <p class="details">{{ product().description | truncate }}</p>
+<p class="details">{{ product().description | truncate }}</p>
 }
