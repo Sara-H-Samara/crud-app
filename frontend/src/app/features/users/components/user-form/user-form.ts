@@ -1,31 +1,27 @@
-import { Component, effect, inject, input, output } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, effect, inject } from "@angular/core";
+import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 
-import { User } from '../../models/user';
-import { UserService } from '../../services/user';
+import { UserService } from "../../services/user";
 
 @Component({
-  selector: 'app-user-form',
+  selector: "app-user-form",
   imports: [ReactiveFormsModule],
-  templateUrl: './user-form.html',
-  styleUrl: './user-form.css',
+  templateUrl: "./user-form.html",
+  styleUrl: "./user-form.css",
 })
 export class UserForm {
   private readonly fb = inject(FormBuilder);
-  private readonly userService = inject(UserService);
-
-  user = input<User | null>(null);
-  userSaved = output<void>();
-  cancelled = output<void>();
+  protected readonly userService = inject(UserService);
 
   userForm = this.fb.nonNullable.group({
-    name: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
+    name: ["", Validators.required],
+    email: ["", [Validators.required, Validators.email]],
   });
 
   constructor() {
+    // when the selected user in the service changes, fill or clear the form
     effect(() => {
-      const user = this.user();
+      const user = this.userService.selectedUser();
       if (user) {
         this.userForm.setValue({ name: user.name, email: user.email });
       } else {
@@ -40,19 +36,11 @@ export class UserForm {
       return;
     }
 
-    const value = this.userForm.getRawValue();
-    const editing = this.user();
+    this.userService.save(this.userForm.getRawValue());
+    this.userForm.reset();
+  }
 
-    const request = editing
-      ? this.userService.updateUser(editing.id!, value)
-      : this.userService.createUser(value);
-
-    request.subscribe({
-      next: () => {
-        this.userForm.reset();
-        this.userSaved.emit();
-      },
-      error: (error) => console.error('Failed to save user:', error),
-    });
+  cancel(): void {
+    this.userService.clearSelection();
   }
 }

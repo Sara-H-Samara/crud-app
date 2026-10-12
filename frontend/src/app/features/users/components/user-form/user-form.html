@@ -1,6 +1,6 @@
 <section class="content-card">
   <div class="section-header">
-    <h2>{{ user() ? 'Edit user' : 'Add a new user' }}</h2>
+    <h2>{{ userService.selectedUser() ? 'Edit user' : 'Add a new user' }}</h2>
     <p>Enter the user's information below.</p>
   </div>
 
@@ -10,24 +10,27 @@
         <label for="name">Name</label>
         <input id="name" type="text" formControlName="name" />
         @if (userForm.controls.name.invalid && userForm.controls.name.touched) {
-          <small class="error">Name is required.</small>
+        <small class="error">Name is required.</small>
         }
       </div>
 
       <div class="form-group">
         <label for="email">Email</label>
         <input id="email" type="email" formControlName="email" />
-        @if (userForm.controls.email.invalid && userForm.controls.email.touched) {
-          <small class="error">Enter a valid email.</small>
+        @if (userForm.controls.email.invalid && userForm.controls.email.touched)
+        {
+        <small class="error">Enter a valid email.</small>
         }
       </div>
 
       <button class="add-button" type="submit">
-        {{ user() ? 'Save changes' : 'Add User' }}
+        {{ userService.selectedUser() ? 'Save changes' : 'Add User' }}
       </button>
 
-      @if (user()) {
-        <button class="cancel-button" type="button" (click)="cancelled.emit()">Cancel</button>
+      @if (userService.selectedUser()) {
+      <button class="cancel-button" type="button" (click)="cancel()">
+        Cancel
+      </button>
       }
     </div>
   </form>
