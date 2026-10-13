@@ -3,9 +3,7 @@
     <div>
       <p class="eyebrow">USER MANAGEMENT</p>
       <h1>Manage your users</h1>
-      <p class="subtitle">
-        Add, view, update, and manage users from one place.
-      </p>
+      <p class="subtitle">Add, view, update, and manage users from one place.</p>
     </div>
 
     <div class="user-count">
@@ -14,7 +12,10 @@
     </div>
   </header>
 
-  <!-- UserForm injects UserService itself: no inputs/outputs needed -->
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
   <app-user-form />
 
   <section class="users-section">
@@ -23,11 +24,15 @@
       <span>All registered users</span>
     </div>
 
-    <!-- UserList stays a simple "presentational" component with input/output -->
-    <app-user-list
-      [users]="userService.users()"
-      (editUser)="userService.select($event)"
-      (deleteUser)="userService.remove($event)"
-    />
+    @if (loading()) {
+      <p class="loading-message">Loading users...</p>
+    } @else {
+      <app-user-list
+        [users]="userService.users()"
+        (editUser)="userService.select($event)"
+        (deleteUser)="userService.remove($event)"
+      />
+    }
   </section>
 </div>
+```
