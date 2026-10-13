@@ -1,50 +1,53 @@
 <h3>Add a product</h3>
 
-<!-- [formGroup] connects this <form> to the FormGroup in TypeScript -->
-<form class="product-form" [formGroup]="productForm" (ngSubmit)="onSubmit()" novalidate>
+<form class="product-form" (submit)="onSubmit($event)" novalidate>
   <!-- NAME -->
   <label for="product-name">Name</label>
-  <input id="product-name" formControlName="name" />
-  @if (f.name.invalid && f.name.touched) {
-    @if (f.name.hasError('required')) {
-      <small class="msg warn">Name is required.</small>
-    } @else if (f.name.hasError('minlength')) {
-      <small class="msg warn">
-        At least {{ f.name.errors?.['minlength'].requiredLength }} characters.
-      </small>
+  <input
+    id="product-name"
+    [formField]="productForm.name"
+    [class.invalid]="productForm.name().touched() && productForm.name().invalid()"
+  />
+  @if (productForm.name().touched() && productForm.name().invalid()) {
+    @for (error of productForm.name().errors(); track error.kind) {
+      <small class="msg warn">{{ error.message }}</small>
     }
   }
 
-  <!-- PRICE: type="number" → the value is a number, not text -->
+  <!-- PRICE: type="number" + a number in the model → the value stays a number -->
   <label for="product-price">Price</label>
-  <input id="product-price" type="number" step="0.5" formControlName="price" />
-  @if (f.price.invalid && f.price.touched) {
-    @if (f.price.hasError('required')) {
-      <small class="msg warn">Price is required.</small>
-    } @else if (f.price.hasError('min')) {
-      <small class="msg warn">Minimum price is {{ f.price.errors?.['min'].min | currency }}.</small>
-    } @else if (f.price.hasError('max')) {
-      <small class="msg warn">Maximum price is {{ f.price.errors?.['max'].max | currency }}.</small>
+  <input
+    id="product-price"
+    type="number"
+    step="0.5"
+    [formField]="productForm.price"
+    [class.invalid]="productForm.price().touched() && productForm.price().invalid()"
+  />
+  @if (productForm.price().touched() && productForm.price().invalid()) {
+    @for (error of productForm.price().errors(); track error.kind) {
+      <small class="msg warn">{{ error.message }}</small>
     }
   }
 
   <!-- DESCRIPTION -->
   <label for="product-description">Description</label>
-  <textarea id="product-description" rows="2" formControlName="description"></textarea>
-  <small>{{ f.description.value.length }} / 100</small>
-  @if (f.description.invalid && f.description.touched) {
-    @if (f.description.hasError('required')) {
-      <small class="msg warn">Description is required.</small>
-    } @else if (f.description.hasError('maxlength')) {
-      <small class="msg warn">Maximum 100 characters.</small>
+  <textarea
+    id="product-description"
+    rows="2"
+    [formField]="productForm.description"
+    [class.invalid]="productForm.description().touched() && productForm.description().invalid()"
+  ></textarea>
+  <small>{{ productModel().description.length }} / 100</small>
+  @if (productForm.description().touched() && productForm.description().invalid()) {
+    @for (error of productForm.description().errors(); track error.kind) {
+      <small class="msg warn">{{ error.message }}</small>
     }
   }
 
   <div class="actions">
     <button type="submit">Add product</button>
-    <!-- type="button" so it does NOT submit the form -->
     <button type="button" class="secondary" (click)="fillExample()">Fill example</button>
-    <button type="button" class="secondary" (click)="productForm.reset()">Clear</button>
+    <button type="button" class="secondary" (click)="clear()">Clear</button>
   </div>
 </form>
 
@@ -52,10 +55,10 @@
   <p class="msg ok">"{{ name }}" was added to the products list.</p>
 }
 
-<!-- LIVE PREVIEW: updates on every keystroke thanks to valueChanges -->
+<!-- LIVE PREVIEW: reads the model signal directly, no toSignal needed -->
 <div class="preview">
   <small>Preview</small>
-  <strong>{{ preview().name || 'Product name' }}</strong>
-  <span>{{ preview().price | currency }}</span>
-  <p>{{ preview().description || 'Description…' }}</p>
+  <strong>{{ productModel().name || 'Product name' }}</strong>
+  <span>{{ productModel().price | currency }}</span>
+  <p>{{ productModel().description || 'Description…' }}</p>
 </div>

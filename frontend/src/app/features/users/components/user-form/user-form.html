@@ -1,64 +1,50 @@
 <section class="content-card">
   <div class="section-header">
-    <h2>
-      {{ userService.selectedUser() ? 'Edit user' : 'Add a new user' }}
-    </h2>
+    <h2>{{ userStore.selectedUser() ? 'Edit user' : 'Add a new user' }}</h2>
     <p>Enter the user's information below.</p>
   </div>
 
-  @if (errorMessage()) {
-    <p class="error">{{ errorMessage() }}</p>
-  }
-
-  @if (successMessage()) {
-    <p class="success">{{ successMessage() }}</p>
-  }
-
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+  <form (submit)="onSubmit($event)" novalidate>
     <div class="form-row">
+      <!-- NAME -->
       <div class="form-group">
         <label for="name">Name</label>
+        <!-- [formField] connects this input to userForm.name (value, touched, disabled...) -->
+        <input id="name" type="text" [formField]="userForm.name" />
 
-        <input
-          id="name"
-          type="text"
-          formControlName="name"
-          [class.invalid]="userForm.controls.name.invalid && userForm.controls.name.touched"
-        />
-
-        @if (userForm.controls.name.invalid && userForm.controls.name.touched) {
-          <small class="error">Name is required.</small>
+        @if (userForm.name().touched() && userForm.name().invalid()) {
+          @for (error of userForm.name().errors(); track error.kind) {
+            <small class="error">{{ error.message }}</small>
+          }
         }
       </div>
 
+      <!-- EMAIL -->
       <div class="form-group">
         <label for="email">Email</label>
+        <input id="email" type="email" [formField]="userForm.email" />
 
-        <input
-          id="email"
-          type="email"
-          formControlName="email"
-          [class.invalid]="userForm.controls.email.invalid && userForm.controls.email.touched"
-        />
-
-        @if (userForm.controls.email.invalid && userForm.controls.email.touched) {
-          <small class="error">Enter a valid email.</small>
+        @if (userForm.email().touched() && userForm.email().invalid()) {
+          @for (error of userForm.email().errors(); track error.kind) {
+            <small class="error">{{ error.message }}</small>
+          }
         }
       </div>
 
-      <button class="add-button" type="submit" [disabled]="loading()">
-        @if (loading()) {
-          Saving...
-        } @else {
-          {{ userService.selectedUser() ? 'Save changes' : 'Add User' }}
-        }
+      <button class="add-button" type="submit" [disabled]="userForm().submitting()">
+        {{ userStore.selectedUser() ? 'Save changes' : 'Add user' }}
       </button>
 
-      @if (userService.selectedUser()) {
-        <button class="cancel-button" type="button" (click)="cancel()" [disabled]="loading()">
-          Cancel
-        </button>
+      @if (userStore.selectedUser()) {
+        <button class="cancel-button" type="button" (click)="cancelEdit()">Cancel</button>
       }
     </div>
   </form>
+
+  @if (successMessage()) {
+    <p class="msg ok">{{ successMessage() }}</p>
+  }
+  @if (errorMessage()) {
+    <p class="msg warn">{{ errorMessage() }}</p>
+  }
 </section>

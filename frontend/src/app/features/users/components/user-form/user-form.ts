@@ -1,69 +1,69 @@
-import { Component, effect, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, effect, inject, signal, untracked } from '@angular/core';
+import { FormField, email, form, required, submit } from '@angular/forms/signals';
+import { firstValueFrom } from 'rxjs';
 
-import { UserService } from '../../services/user';
+import { UserStore } from '../../services/user-store';
 
 @Component({
   selector: 'app-user-form',
-  imports: [ReactiveFormsModule],
+  imports: [FormField],
   templateUrl: './user-form.html',
   styleUrl: './user-form.css',
 })
 export class UserForm {
-  private readonly fb = inject(FormBuilder);
-  protected readonly userService = inject(UserService);
+  protected readonly userStore = inject(UserStore);
 
-  protected readonly loading = signal(false);
-  protected readonly errorMessage = signal('');
-  protected readonly successMessage = signal('');
+  protected readonly userModel = signal({ name: '', email: '' });
 
-  userForm = this.fb.nonNullable.group({
-    name: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
+  protected readonly userForm = form(this.userModel, (path) => {
+    required(path.name, { message: 'Name is required.' });
+    required(path.email, { message: 'Email is required.' });
+    email(path.email, { message: 'Enter a valid email address.' });
   });
 
+  protected readonly successMessage = signal('');
+  protected readonly errorMessage = signal('');
+
   constructor() {
+    //When a user is selected for editing (or the selection is cleared), fill or empty the form
     effect(() => {
-      const user = this.userService.selectedUser();
+      const selected = this.userStore.selectedUser();
+      this.userModel.set({ name: selected?.name ?? '', email: selected?.email ?? '' });
+      // clear touched/dirty so a freshly loaded form shows no errors
+      untracked(() => this.userForm().reset());
+    });
+  }
 
-      if (user) {
-        this.userForm.setValue({
-          name: user.name,
-          email: user.email,
-        });
-      } else {
-        this.userForm.reset();
+  async onSubmit(event: Event): Promise<void> {
+    event.preventDefault(); // stop the browser from reloading the page
+
+    this.successMessage.set('');
+    this.errorMessage.set('');
+    const editing = this.userStore.selectedUser();
+
+    // submit(): marks every field as touched, and runs the action ONLY if the form is valid
+    await submit(this.userForm, async (field) => {
+      try {
+        await firstValueFrom(this.userStore.save(field().value()));
+        this.successMessage.set(editing ? 'User updated.' : 'User created.');
+        this.clearForm();
+      } catch {
+        this.errorMessage.set('Could not save the user. Check your connection and try again.');
       }
+      return undefined;
     });
   }
 
-  onSubmit(): void {
-    if (this.userForm.invalid || this.loading()) {
-      this.userForm.markAllAsTouched();
-      return;
-    }
-
-    this.loading.set(true);
-    this.errorMessage.set('');
+  cancelEdit(): void {
+    this.userStore.clearSelection();
+    this.clearForm();
     this.successMessage.set('');
-
-    this.userService.save(this.userForm.getRawValue()).subscribe({
-      next: () => {
-        this.loading.set(false);
-        this.successMessage.set('User saved successfully.');
-        this.userService.clearSelection();
-      },
-      error: (error) => {
-        this.loading.set(false);
-        this.errorMessage.set('Failed to save user. Please try again.');
-        console.error('Save user error:', error);
-      },
-    });
+    this.errorMessage.set('');
   }
 
-  cancel(): void {
-    this.userService.clearSelection();
-    this.errorMessage.set('');
-    this.successMessage.set('');
+  // empty the values AND reset touched/dirty, so no red errors appear on the empty form
+  private clearForm(): void {
+    this.userModel.set({ name: '', email: '' });
+    this.userForm().reset();
   }
 }

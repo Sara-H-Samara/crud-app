@@ -8,7 +8,8 @@
   max-width: 420px;
 }
 
-.product-form .ng-invalid.ng-touched {
+/* red border on a field with an error — the class is added by [class.invalid] in the template */
+.product-form .invalid {
   border-color: var(--danger, #c0392b);
 }
 

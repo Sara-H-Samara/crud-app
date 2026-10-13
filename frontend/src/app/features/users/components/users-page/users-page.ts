@@ -1,8 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 
-import { UserService } from '../../services/user';
 import { UserForm } from '../user-form/user-form';
 import { UserList } from '../user-list/user-list';
+import { UserStore } from '../../services/user-store';
 
 @Component({
   imports: [UserForm, UserList],
@@ -11,7 +11,7 @@ import { UserList } from '../user-list/user-list';
   templateUrl: './users-page.html',
 })
 export class UsersPage implements OnInit {
-  protected readonly userService = inject(UserService);
+  protected readonly userService = inject(UserStore);
 
   protected readonly loading = signal(false);
   protected readonly errorMessage = signal('');
@@ -28,6 +28,15 @@ export class UsersPage implements OnInit {
         this.loading.set(false);
         this.errorMessage.set('Failed to load users.');
         console.error('Load users error:', error);
+      },
+    });
+  }
+  onDelete(id: number): void {
+    this.errorMessage.set('');
+    this.userService.remove(id).subscribe({
+      error: (error) => {
+        this.errorMessage.set('Could not delete the user. Try again.');
+        console.error('Delete user error:', error);
       },
     });
   }

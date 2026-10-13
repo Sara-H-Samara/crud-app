@@ -1,4 +1,5 @@
-.form-card {
+/* the card around the form — name now matches class="content-card" in the HTML */
+.content-card {
   padding: 30px;
   background: #ffffff;
   border: 1px solid #e7e1d9;
@@ -17,9 +18,10 @@
   font-size: 14px;
 }
 
+/* flex-start: inputs stay aligned even when an error message appears under one of them */
 .form-row {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 18px;
   margin-top: 25px;
 }
@@ -52,29 +54,62 @@
   box-shadow: 0 0 0 3px rgba(184, 107, 75, 0.1);
 }
 
-.add-button {
-  padding: 13px 22px;
-  border: none;
-  border-radius: 10px;
-  background: #b86b4b;
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
+/* red border on a field with an error (class added from the template, see below) */
+.form-group input.invalid {
+  border-color: #c0392b;
 }
 
-.add-button:hover {
-  background: #a95f41;
+/* the validation messages under each input */
+.error {
+  display: block;
+  margin-top: 6px;
+  color: #c0392b;
+  font-size: 13px;
 }
 
+/* both buttons: same top margin so they line up with the inputs (below the labels) */
+.add-button,
 .cancel-button {
   margin-top: 29px;
   padding: 13px 22px;
-  border: 1px solid #ddd6cd;
   border-radius: 10px;
-  background: #ffffff;
-  color: #292824;
   font-size: 14px;
   font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
+}
+
+.add-button {
+  border: none;
+  background: #b86b4b;
+  color: #ffffff;
+}
+
+.add-button:hover:not(:disabled) {
+  background: #a95f41;
+}
+
+/* while saving: looks inactive */
+.add-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  border: 1px solid #ddd6cd;
+  background: #ffffff;
+  color: #292824;
+}
+
+/* phones: stack fields and buttons vertically */
+@media (max-width: 640px) {
+  .form-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .add-button,
+  .cancel-button {
+    margin-top: 0;
+  }
 }

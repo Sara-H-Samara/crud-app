@@ -30,9 +30,8 @@
       <app-user-list
         [users]="userService.users()"
         (editUser)="userService.select($event)"
-        (deleteUser)="userService.remove($event)"
+        (deleteUser)="onDelete($event)"
       />
     }
   </section>
 </div>
-```

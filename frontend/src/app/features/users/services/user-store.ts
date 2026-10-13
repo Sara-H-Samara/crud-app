@@ -1,36 +1,35 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
 import { User } from '../models/user';
+import { UserApiService, UserPayload } from './user-api.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
-  private readonly http = inject(HttpClient);
+export class UserStore {
+  private readonly userApi = inject(UserApiService);
 
-  private readonly apiUrl = 'http://localhost:8080/users';
-  // Writable signals: only the service can modify them.
+  // Private writable state.
   private readonly _users = signal<User[]>([]);
   private readonly _selectedUser = signal<User | null>(null);
 
-  // Read-only signals exposed to components.
+  // Public read-only state.
   readonly users = this._users.asReadonly();
   readonly selectedUser = this._selectedUser.asReadonly();
   readonly count = computed(() => this._users().length);
 
-  // GET: retrieve users from the backend.
+  // Load users from the backend, then update the state.
   loadUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl).pipe(tap((users) => this._users.set(users)));
+    return this.userApi.getUsers().pipe(tap((users) => this._users.set(users)));
   }
 
-  // POST: create a user, or PUT: update an existing user.
-  save(value: { name: string; email: string }): Observable<User> {
+  // Create a user or update the selected user.
+  save(value: UserPayload): Observable<User> {
     const editing = this._selectedUser();
 
     if (editing) {
-      return this.http.put<User>(`${this.apiUrl}/${editing.id}`, value).pipe(
+      return this.userApi.updateUser(editing.id, value).pipe(
         tap((updatedUser) => {
           this._users.update((users) =>
             users.map((user) => (user.id === updatedUser.id ? updatedUser : user)),
@@ -41,16 +40,16 @@ export class UserService {
       );
     }
 
-    return this.http.post<User>(this.apiUrl, value).pipe(
+    return this.userApi.createUser(value).pipe(
       tap((newUser) => {
         this._users.update((users) => [...users, newUser]);
       }),
     );
   }
 
-  // DELETE: remove a user from the backend.
+  // Delete a user, then update the state.
   remove(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+    return this.userApi.deleteUser(id).pipe(
       tap(() => {
         this._users.update((users) => users.filter((user) => user.id !== id));
 
@@ -61,10 +60,12 @@ export class UserService {
     );
   }
 
+  // Select a user for editing.
   select(user: User): void {
     this._selectedUser.set(user);
   }
 
+  // Cancel editing.
   clearSelection(): void {
     this._selectedUser.set(null);
   }
