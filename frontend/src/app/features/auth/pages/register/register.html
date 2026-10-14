@@ -1,0 +1,51 @@
+<section class="auth-card">
+  <h1>Create an account</h1>
+  <p>Register to get started.</p>
+
+  <form (submit)="onSubmit($event)">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input id="name" type="text" autocomplete="name" [formField]="registerForm.name" />
+
+      @if (registerForm.name().invalid() && registerForm.name().touched()) {
+        @for (error of registerForm.name().errors(); track error) {
+          <small class="error">{{ error.message }}</small>
+        }
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="email" [formField]="registerForm.email" />
+
+      @if (registerForm.email().invalid() && registerForm.email().touched()) {
+        @for (error of registerForm.email().errors(); track error) {
+          <small class="error">{{ error.message }}</small>
+        }
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        autocomplete="new-password"
+        [formField]="registerForm.password"
+      />
+
+      @if (registerForm.password().invalid() && registerForm.password().touched()) {
+        @for (error of registerForm.password().errors(); track error) {
+          <small class="error">{{ error.message }}</small>
+        }
+      }
+    </div>
+
+    <button type="submit">Create Account</button>
+  </form>
+
+  <p>
+    Already have an account?
+    <a routerLink="/login">Login</a>
+  </p>
+</section>

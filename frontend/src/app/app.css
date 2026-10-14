@@ -1,24 +1,24 @@
+.app-container {
+  min-height: 100vh;
+}
+
 .main-nav {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 16px;
-  background: var(--surface);
-  border-bottom: 2px solid var(--accent);
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
 }
 
-.main-nav button {
-  background: transparent;
-  border-color: var(--accent);
+.main-nav a {
+  text-decoration: none;
+  color: inherit;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-.main-nav button:hover {
-  background: var(--accent);
-  color: var(--primary);
-}
-
-.main-nav button.active {
-  background: var(--primary);
-  color: #ffffff;
-  border-color: var(--primary);
+.main-nav a.active {
+  background-color: #e0e7ff;
+  color: #3730a3;
+  font-weight: 600;
 }

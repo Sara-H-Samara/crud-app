@@ -1,10 +1,17 @@
-<nav class="main-nav">
-  <button [class.active]="page === 'users'" (click)="setPage('users')">Users CRUD</button>
-  <button [class.active]="page === 'shop'" (click)="setPage('shop')">Mini Shop</button>
-</nav>
+<div class="app-container">
+  <nav class="main-nav">
+    <a routerLink="/users" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      Users CRUD
+    </a>
 
-@if (page === 'users') {
-  <app-users-page />
-} @else {
-  <app-shop-page />
-}
+    <a routerLink="/shop" routerLinkActive="active"> Mini Shop </a>
+
+    <a routerLink="/login" routerLinkActive="active"> Login </a>
+
+    <a routerLink="/register" routerLinkActive="active"> Register </a>
+  </nav>
+
+  <main>
+    <router-outlet />
+  </main>
+</div>
