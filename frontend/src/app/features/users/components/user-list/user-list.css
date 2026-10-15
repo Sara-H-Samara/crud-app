@@ -1,92 +1,137 @@
+/* one white panel, users separated by thin lines */
 .user-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  display: block;
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
 }
 
 .user-item {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 16px 20px;
-  margin-bottom: 10px;
-  background: #ffffff;
-  border: 1px solid #e7e1d9;
-  border-radius: 12px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--line);
+}
+
+.user-item:first-child {
+  border-top: none;
+}
+
+.user-item:hover {
+  background: #fafbfd;
 }
 
 .avatar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: #f1e5db;
-  color: #b86b4b;
+  background: var(--accent-soft);
+  color: var(--accent-text);
   font-weight: 700;
 }
 
 .user-info {
   display: flex;
-  flex-direction: column;
   flex: 1;
+  flex-direction: column;
+  min-width: 0;
 }
 
 .user-name {
+  color: var(--ink);
   font-weight: 600;
 }
 
 .user-email {
-  margin-top: 2px;
-  color: #77736c;
+  overflow: hidden;
+  color: var(--muted);
   font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
 }
 
+.details-button,
 .edit-button,
 .delete-button {
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-family: inherit;
+  padding: 7px 12px;
   font-size: 13px;
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.2;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
   cursor: pointer;
-  transition: background 0.15s ease;
 }
 
-.edit-button {
-  border: 1px solid #ddd6cd;
-  background: #ffffff;
-  color: #292824;
-}
-
+.details-button:hover,
 .edit-button:hover {
-  background: #f7f5f0;
+  background: var(--neutral-bg);
+  border-color: var(--line);
 }
 
 .delete-button {
-  border: 1px solid #f0c9c2;
-  background: #fdf3f1;
-  color: #c0392b;
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-color: transparent;
 }
 
 .delete-button:hover {
-  background: #fadcd7;
+  color: #ffffff;
+  background: var(--danger);
+  border-color: var(--danger);
 }
 
-.details-button {
-  display: inline-block;
-  padding: 8px 12px;
-  border-radius: 6px;
-  text-decoration: none;
-  background-color: #e0e7ff;
-  color: #3730a3;
+/* shown when there are no users yet */
+.empty-state {
+  padding: 48px 20px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-card);
+}
+
+.empty-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font-size: 22px;
+}
+
+.empty-state h3 {
+  font-size: 16px;
+}
+
+.empty-state p {
+  margin: 6px 0 0;
+  color: var(--muted);
   font-size: 14px;
-  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .user-item {
+    flex-wrap: wrap;
+  }
+
+  .actions {
+    width: 100%;
+    padding-left: 52px;
+  }
 }

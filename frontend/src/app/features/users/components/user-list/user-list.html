@@ -18,11 +18,11 @@
         </div>
 
         <div class="actions">
-          <a class="details-button" [routerLink]="['/users', user.id]"> View Details </a>
+          <a class="details-button" [routerLink]="['/users', user.id]">View</a>
 
           <button class="edit-button" type="button" (click)="editUser.emit(user)">Edit</button>
 
-          <button class="delete-button" type="button" (click)="deleteUser.emit(user.id!)">
+          <button class="delete-button" type="button" (click)="deleteUser.emit(user.id)">
             Delete
           </button>
         </div>

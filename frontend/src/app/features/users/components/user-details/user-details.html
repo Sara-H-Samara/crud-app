@@ -1,3 +1,32 @@
-<h1>User Details</h1>
+<div class="details-page">
+  <a class="back-link" routerLink="/users">← All users</a>
 
-<p>User ID: {{ userId }}</p>
+  @if (errorMessage()) {
+    <p class="msg warn">{{ errorMessage() }}</p>
+  } @else if (user(); as user) {
+    <article class="details-card">
+      <div class="details-head">
+        <div class="details-avatar">{{ user.name.charAt(0).toUpperCase() }}</div>
+        <div>
+          <h1>{{ user.name }}</h1>
+          <p>{{ user.email }}</p>
+        </div>
+      </div>
+
+      <dl class="details-meta">
+        <div>
+          <dt>User ID</dt>
+          <dd>{{ user.id }}</dd>
+        </div>
+        <div>
+          <dt>Email</dt>
+          <dd>
+            <a [href]="'mailto:' + user.email">{{ user.email }}</a>
+          </dd>
+        </div>
+      </dl>
+    </article>
+  } @else {
+    <p class="loading">Loading user…</p>
+  }
+</div>

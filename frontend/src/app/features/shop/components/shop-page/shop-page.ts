@@ -3,13 +3,13 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ProductForm } from './product-form/product-form';
 import { ProductService } from '../../services/product';
 import { CartService } from '../../services/cart';
-import { AuthService } from '../../../../core/services/auth';
 import { ProductItem } from './product-item/product-item';
-import { LoginBox } from './login-box/login-box';
 import { Highlight } from '../../../../shared/directives/highlight';
+import { AuthService } from '../../../auth/services/auth.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  imports: [ProductItem, LoginBox, CurrencyPipe, DatePipe, Highlight, ProductForm],
+  imports: [ProductItem, CurrencyPipe, DatePipe, Highlight, ProductForm, RouterLink],
   selector: 'app-shop-page',
   styleUrl: './shop-page.css',
   templateUrl: './shop-page.html',

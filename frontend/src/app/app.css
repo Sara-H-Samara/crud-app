@@ -1,24 +1,121 @@
-.app-container {
-  min-height: 100vh;
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  height: 64px;
+  padding: 0 24px;
+  background: var(--ink);
 }
 
-.main-nav {
+.topbar a {
+  color: #b9c4d8;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.topbar a:hover {
+  color: #ffffff;
+}
+
+.topbar .brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* main links: the active one gets a marigold underline */
+.topbar-links {
+  display: flex;
+  align-self: stretch;
+  gap: 4px;
+}
+
+.topbar-links a {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+}
+
+.topbar-links a.active {
+  color: #ffffff;
+  border-bottom-color: var(--accent);
+}
+
+/* right side: account */
+.topbar-account {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 16px 24px;
+  margin-left: auto;
 }
 
-.main-nav a {
-  text-decoration: none;
-  color: inherit;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
+.topbar-account a.active {
+  color: #ffffff;
 }
 
-.main-nav a.active {
-  background-color: #e0e7ff;
-  color: #3730a3;
+.account-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  font-size: 14px;
   font-weight: 600;
+}
+
+.account-initial {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.topbar-button {
+  padding: 7px 14px;
+  background: transparent;
+  color: #dfe6f3;
+  border-color: rgb(255 255 255 / 0.25);
+}
+
+.topbar-button:hover {
+  background: rgb(255 255 255 / 0.08);
+  border-color: rgb(255 255 255 / 0.45);
+}
+
+.topbar .topbar-cta {
+  padding: 7px 14px;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--ink);
+}
+
+.topbar .topbar-cta:hover {
+  background: #f5c463;
+  color: var(--ink);
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    gap: 12px;
+    padding: 0 12px;
+  }
+
+  .topbar .brand-name,
+  .account-name {
+    display: none;
+  }
 }

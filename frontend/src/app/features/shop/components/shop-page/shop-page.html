@@ -1,7 +1,4 @@
 <div class="page">
-  <!-- no inputs/outputs any more: LoginBox uses AuthService -->
-  <app-login-box class="card" />
-
   <section class="card">
     <h3>Products</h3>
 
@@ -41,10 +38,13 @@
           <strong>Total: {{ cart.total() | currency }}</strong>
         </p>
 
-        @if (!auth.isLoggedIn()) {
-          <p class="msg warn">Please log in to checkout.</p>
+        @if (!auth.isAuthenticated()) {
+          <p class="msg warn">
+            Please <a routerLink="/login" [queryParams]="{ returnUrl: '/shop' }">log in</a> to
+            checkout.
+          </p>
         } @else {
-          <p class="msg ok">Ready to checkout, {{ auth.username() }}!</p>
+          <p class="msg ok">Ready to checkout, {{ auth.currentUser()?.name }}!</p>
           <button class="secondary" (click)="cart.clear()">Clear cart</button>
         }
       }

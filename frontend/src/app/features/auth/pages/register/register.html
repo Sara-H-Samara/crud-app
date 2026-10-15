@@ -1,51 +1,71 @@
-<section class="auth-card">
-  <h1>Create an account</h1>
-  <p>Register to get started.</p>
+<div class="auth-layout">
+  <aside class="auth-aside">
+    <h2>Start your registry.</h2>
+    <p>An account takes a minute. You'll go straight to your users list.</p>
+  </aside>
 
-  <form (submit)="onSubmit($event)">
-    <div class="form-group">
-      <label for="name">Name</label>
-      <input id="name" type="text" autocomplete="name" [formField]="registerForm.name" />
+  <section class="auth-panel">
+    <h1>Create an account</h1>
+    <p class="auth-lead">Your password needs at least 8 characters.</p>
 
-      @if (registerForm.name().invalid() && registerForm.name().touched()) {
-        @for (error of registerForm.name().errors(); track error) {
-          <small class="error">{{ error.message }}</small>
+    <form class="auth-form" (submit)="onSubmit($event)" novalidate>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input
+          id="name"
+          type="text"
+          autocomplete="name"
+          [formField]="registerForm.name"
+          [class.invalid]="registerForm.name().touched() && registerForm.name().invalid()"
+        />
+        @if (registerForm.name().touched() && registerForm.name().invalid()) {
+          @for (error of registerForm.name().errors(); track error.kind) {
+            <small class="error">{{ error.message }}</small>
+          }
         }
-      }
-    </div>
+      </div>
 
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input id="email" type="email" autocomplete="email" [formField]="registerForm.email" />
-
-      @if (registerForm.email().invalid() && registerForm.email().touched()) {
-        @for (error of registerForm.email().errors(); track error) {
-          <small class="error">{{ error.message }}</small>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          autocomplete="email"
+          [formField]="registerForm.email"
+          [class.invalid]="registerForm.email().touched() && registerForm.email().invalid()"
+        />
+        @if (registerForm.email().touched() && registerForm.email().invalid()) {
+          @for (error of registerForm.email().errors(); track error.kind) {
+            <small class="error">{{ error.message }}</small>
+          }
         }
-      }
-    </div>
+      </div>
 
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input
-        id="password"
-        type="password"
-        autocomplete="new-password"
-        [formField]="registerForm.password"
-      />
-
-      @if (registerForm.password().invalid() && registerForm.password().touched()) {
-        @for (error of registerForm.password().errors(); track error) {
-          <small class="error">{{ error.message }}</small>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          autocomplete="new-password"
+          [formField]="registerForm.password"
+          [class.invalid]="registerForm.password().touched() && registerForm.password().invalid()"
+        />
+        @if (registerForm.password().touched() && registerForm.password().invalid()) {
+          @for (error of registerForm.password().errors(); track error.kind) {
+            <small class="error">{{ error.message }}</small>
+          }
         }
+      </div>
+
+      @if (errorMessage()) {
+        <p class="error">{{ errorMessage() }}</p>
       }
-    </div>
 
-    <button type="submit">Create Account</button>
-  </form>
+      <button type="submit" [disabled]="registerForm().submitting()">
+        {{ registerForm().submitting() ? 'Creating account…' : 'Create account' }}
+      </button>
+    </form>
 
-  <p>
-    Already have an account?
-    <a routerLink="/login">Login</a>
-  </p>
-</section>
+    <p class="auth-switch">Already have an account? <a routerLink="/login">Log in</a></p>
+  </section>
+</div>

@@ -1,0 +1,99 @@
+.details-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--ink);
+}
+
+.details-card {
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
+}
+
+/* top of the card: avatar + name */
+.details-head {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 28px;
+  border-bottom: 1px solid var(--line);
+}
+
+.details-avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--ink);
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.details-head h1 {
+  font-size: 26px;
+  letter-spacing: -0.02em;
+}
+
+.details-head p {
+  margin: 2px 0 0;
+  color: var(--muted);
+}
+
+/* bottom of the card: label / value rows */
+.details-meta {
+  margin: 0;
+  padding: 8px 28px 16px;
+}
+
+.details-meta div {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.details-meta div:first-child {
+  border-top: none;
+}
+
+.details-meta dt {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.details-meta dd {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.loading {
+  color: var(--muted);
+}
+
+@media (max-width: 520px) {
+  .details-meta div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}

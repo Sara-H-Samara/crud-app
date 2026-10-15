@@ -1,107 +1,55 @@
-/* the card around the form — name now matches class="content-card" in the HTML */
 .content-card {
-  padding: 30px;
-  background: #ffffff;
-  border: 1px solid #e7e1d9;
-  border-radius: 18px;
-  box-shadow: 0 8px 30px rgba(41, 40, 36, 0.05);
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
 }
 
 .section-header h2 {
-  margin: 0;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .section-header p {
-  margin: 6px 0 0;
-  color: #88837b;
+  margin: 4px 0 0;
+  color: var(--muted);
   font-size: 14px;
 }
 
-/* flex-start: inputs stay aligned even when an error message appears under one of them */
+/* name, email and the buttons on one line */
 .form-row {
   display: flex;
   align-items: flex-start;
-  gap: 18px;
-  margin-top: 25px;
+  gap: 16px;
+  margin-top: 20px;
 }
 
 .form-group {
   flex: 1;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.form-group input {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 13px 14px;
-  border: 1px solid #ddd6cd;
-  border-radius: 10px;
-  outline: none;
-  font-size: 14px;
-  color: #292824;
-  background: #fcfbf9;
-}
-
-.form-group input:focus {
-  border-color: #b86b4b;
-  box-shadow: 0 0 0 3px rgba(184, 107, 75, 0.1);
-}
-
-/* red border on a field with an error (class added from the template, see below) */
-.form-group input.invalid {
-  border-color: #c0392b;
-}
-
-/* the validation messages under each input */
-.error {
-  display: block;
-  margin-top: 6px;
-  color: #c0392b;
-  font-size: 13px;
-}
-
-/* both buttons: same top margin so they line up with the inputs (below the labels) */
+/* push the buttons down so they line up with the inputs (below the labels) */
 .add-button,
 .cancel-button {
-  margin-top: 29px;
-  padding: 13px 22px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
+  margin-top: 26px;
   white-space: nowrap;
-  cursor: pointer;
-}
-
-.add-button {
-  border: none;
-  background: #b86b4b;
-  color: #ffffff;
-}
-
-.add-button:hover:not(:disabled) {
-  background: #a95f41;
-}
-
-/* while saving: looks inactive */
-.add-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .cancel-button {
-  border: 1px solid #ddd6cd;
-  background: #ffffff;
-  color: #292824;
+  color: var(--ink);
+  background: var(--surface);
+  border-color: var(--line);
 }
 
-/* phones: stack fields and buttons vertically */
+.cancel-button:hover {
+  background: var(--neutral-bg);
+  border-color: var(--line);
+}
+
+.msg {
+  margin-top: 16px;
+}
+
 @media (max-width: 640px) {
   .form-row {
     flex-direction: column;

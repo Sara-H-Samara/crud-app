@@ -1,17 +1,30 @@
-<div class="app-container">
-  <nav class="main-nav">
-    <a routerLink="/users" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      Users CRUD
-    </a>
+<header class="topbar">
+  <a class="brand" routerLink="/">
+    <span class="brand-mark"></span>
+    <span class="brand-name">Registry</span>
+  </a>
 
-    <a routerLink="/shop" routerLinkActive="active"> Mini Shop </a>
-
-    <a routerLink="/login" routerLinkActive="active"> Login </a>
-
-    <a routerLink="/register" routerLinkActive="active"> Register </a>
+  <nav class="topbar-links">
+    @if (auth.isAuthenticated()) {
+      <a routerLink="/users" routerLinkActive="active">Users</a>
+    }
+    <a routerLink="/shop" routerLinkActive="active">Mini Shop</a>
   </nav>
 
-  <main>
-    <router-outlet />
-  </main>
-</div>
+  <div class="topbar-account">
+    @if (auth.currentUser(); as user) {
+      <span class="account-chip">
+        <span class="account-initial">{{ user.name.charAt(0).toUpperCase() }}</span>
+        <span class="account-name">{{ user.name }}</span>
+      </span>
+      <button type="button" class="topbar-button" (click)="auth.logout()">Log out</button>
+    } @else {
+      <a routerLink="/login" routerLinkActive="active">Log in</a>
+      <a class="topbar-cta" routerLink="/register">Create account</a>
+    }
+  </div>
+</header>
+
+<main>
+  <router-outlet />
+</main>
